@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>MicroservicesWithSpringBoot</artifactId>
+        <groupId>com.github.singhr2</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>UserMicroservice</artifactId>
+
+    <dependencies>
+        <!--
+        Spring Web:
+        Build web, including RESTful, applications using Spring MVC.
+        Uses Apache Tomcat as the default embedded container.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--
+        Eureka Discovery Client :
+        a REST based service for locating services for the purpose of load balancing and
+        failover of middle-tier servers.
+        -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!--
+        Spring Boot DevTools :
+        Provides fast application restarts, LiveReload, and configurations
+        for enhanced development experience.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!--
+        [OPTIONAL] Spring Boot Actuator:
+        Supports built in (or custom) endpoints that let you monitor and manage your application -
+        such as application health, metrics, sessions, etc.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--
+        Java annotation library which helps to reduce boilerplate code.
+        -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <!--
+            H2 Database (SQL)
+            Provides a fast in-memory database that supports JDBC API and R2DBC access,
+            with a small (2mb) footprint.
+            Supports embedded and server modes as well as a browser based console application.
+        -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+<!--            <version>1.4.200</version>-->
+<!--            <scope>test</scope>-->
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--
+        Spring Data JPA (SQL)
+        Persist data in SQL stores with Java Persistence API
+        using Spring Data and Hibernate.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--
+            To map between Model - DTO - Entity
+        -->
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.3.8</version>
+        </dependency>
+
+        <!--
+        Spring Security (SECURITY)
+        Highly customizable authentication and access-control framework for Spring applications.
+
+        This is added to encrypt the user password.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--
+            This is added to support XML request and response format in exposed API
+            By default, the service is only supporting JSON format.
+            (See UserController)
+        -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+        <!--
+        Config Client:
+        Client that connects to a Spring Cloud Config Server
+        to fetch the application's configuration.
+        -->
+        <!--
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        -->
+
+        <!--
+        Config Server:
+        Central management for configuration via Git, SVN, or HashiCorp Vault.
+        -->
+        <!--
+        <dependency>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+        -->
+
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        -->
+    </dependencies>
+    <!--
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+    -->
+</project>
