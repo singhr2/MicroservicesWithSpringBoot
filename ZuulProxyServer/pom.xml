@@ -39,6 +39,15 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!-- https://stackoverflow.com/questions/57895124/receiving-403-forbidden-when-attempting-to-validate-json-bearer-header-through-s -->
+        <!-- Need to check if it is needed in User Service or Zuul Proxy or both -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <!-- <version>2.2.11</version>-->
+        </dependency>
+
     </dependencies>
 
 </project>

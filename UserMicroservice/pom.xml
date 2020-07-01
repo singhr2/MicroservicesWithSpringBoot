@@ -121,6 +121,22 @@
             <version>2.11.0</version>
         </dependency>
 
+        <!-- https://stackoverflow.com/questions/57895124/receiving-403-forbidden-when-attempting-to-validate-json-bearer-header-through-s -->
+        <!-- Need to check if it is needed in User Service or Zuul Proxy or both -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <!-- <version>2.2.11</version>-->
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <!-- (Apache Jar) for JSON Web Token Support For The JVM  -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
         <!--
         Config Client:
         Client that connects to a Spring Cloud Config Server
