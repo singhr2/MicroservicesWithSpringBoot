@@ -26,6 +26,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JWT_TOKEN_HEADER_NAME;
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX;
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JWT_TOKEN_SECRET;
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JWT_TOKEN_VALIDE_FOR;
+
 /*
   This filter is configured in  UserWebSecurityConfigurer.configure()
 
@@ -98,9 +103,7 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         UserDTO userDTO = usersService.getUserDetailsByEmailId(emailIdAsUsername);
         LOGGER.info("-=-> userDTO loaded :" + userDTO);
 
-        //String secretKeyToGenerateJwtToken = SecurityConstants.SECRET_KEY_TO_GENERATE_JWT;
-
-        Long jwt_token_validity_duration = SecurityConstants.JWT_TOKEN_VALIDE_FOR;
+        Long jwt_token_validity_duration = Long.parseLong( environment.getProperty( PROPERTY_JWT_TOKEN_VALIDE_FOR ));
         LOGGER.info("-=-> JWT token_expiration_time : " + jwt_token_validity_duration);
 
         LOGGER.info("-=-> Generating JWT Token ...");
@@ -114,13 +117,13 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                 //.setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 //.setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
                 //.setExpiration(Date.from(ZonedDateTime.now().plusMinutes(token_expiration_time).toInstant()))
-                //.setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(token_expiration_time)))
-                .setExpiration(Date.from(ZonedDateTime.now().plus(jwt_token_validity_duration, ChronoUnit.DAYS).toInstant()))
+                //.setExpiration(new Date(System.currentTimeMillis() + jwt_token_validity_duration))
+                .setExpiration(Date.from(ZonedDateTime.now().plus(jwt_token_validity_duration, ChronoUnit.MINUTES).toInstant()))
                 .signWith(
                         SignatureAlgorithm.HS512,
                         //TextCodec.BASE64.decode(environment.getProperty(JWT_TOKEN_SECRET))
                         // This value is also referred in JWTAuthorizationFilter (zuul proxy)
-                        SecurityConstants.SECRET_KEY_TO_GENERATE_JWT
+                        environment.getProperty( PROPERTY_JWT_TOKEN_SECRET )
                 )
                 .compact();
 
@@ -130,13 +133,14 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         // Note that when adding the header value in Postman/Boomrang
         // We don't need to add the prefix 'Bearer ' as it is added here.
         response.addHeader(
-                SecurityConstants.HEADER_NAME_FOR_JWT_TOKEN,
-                SecurityConstants.JWT_TOKEN_PREFIX + jwsAccessToken);
+                environment.getProperty( PROPERTY_JWT_TOKEN_HEADER_NAME ) ,
+                    environment.getProperty( PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX )
+                        + jwsAccessToken);
 
-        LOGGER.info("JwtToken in Header :" + response.getHeader(SecurityConstants.HEADER_NAME_FOR_JWT_TOKEN));
-
-        //commented as don't see being referred anywhere
-        //response.setHeader(SecurityConstants.HEADER_NAME_FOR_USERNAME, userDTO.getUserId());
+        LOGGER.info("JwtToken in Header :"
+                + response.getHeader(
+                        environment.getProperty(
+                                PROPERTY_JWT_TOKEN_HEADER_NAME )));
     }
 
     /*

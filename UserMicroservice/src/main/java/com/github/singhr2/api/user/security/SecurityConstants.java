@@ -10,26 +10,22 @@ package com.github.singhr2.api.user.security;
 //---------------------------------------------
 
 public class SecurityConstants {
-    //TODO Review and move to application.properties if required.
+    public static final String PROPERTY_ZUUL_GATEWAY_IP = "zuul.gateway.ip";
 
-    //Secret Key to generate JWTs
-    public static final String SECRET_KEY_TO_GENERATE_JWT = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E";
+     //Secret Key to generate JWTs
+    public static final String PROPERTY_JWT_TOKEN_SECRET = "jwt.token.secret";
 
-    // 864_000_000L = no. of seconds in 10 days
-    //public static final Long PROPERTY_JWT_TOKEN_VALIDE_FOR = 864_000_000L;
-    public static final Long JWT_TOKEN_VALIDE_FOR = 1L;  // no. of day(s)
+    // currently using unit in Minutes (see UserAuthenticationFilter.successfulAuthentication()
+    public static final String PROPERTY_JWT_TOKEN_VALIDE_FOR = "jwt.token.valid.duration";
 
-    public static final String JWT_TOKEN_PREFIX = "Bearer "; // DoNot delete SPACE at the end
-    public static final String HEADER_NAME_FOR_JWT_TOKEN = "Authorization";
+    public static final String PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX = "jwt.token.header.value.prefix";
 
-    public static final String HEADER_NAME_FOR_USERNAME = "LOGGED_IN_USER";
+    public static final String PROPERTY_JWT_TOKEN_HEADER_NAME = "jwt.token.header.name";
 
     // URLs referenced in code
-    // This is defined in UsersController and used in UserWebSecurityConfigurer
-    public static final String USERS_SIGN_UP_URL = "/api/users/sign-up";
+    // Note: This is defined in 'UsersController' (path = "/sign-up")
+    //public static final String PROPERTY_URL_USERS_SIGN_UP = "url.users.signup";
+
     //Note: These can be changed in application.properties
-    public static final String H2_CONSOLE_URL = "/h2-console/**";
-    public static final String ZUUL_GATEWAY_IP = "zuul.gateway.ip";
-
-
+    //public static final String PROPERTY_URL_H2_CONSOLE ="url.h2.console";
 }

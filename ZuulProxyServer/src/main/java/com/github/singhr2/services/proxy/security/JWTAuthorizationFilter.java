@@ -9,9 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import static com.github.singhr2.services.proxy.security.SecurityConstants.HEADER_NAME_FOR_JWT_TOKEN;
-import static com.github.singhr2.services.proxy.security.SecurityConstants.JWT_TOKEN_PREFIX;
-import static com.github.singhr2.services.proxy.security.SecurityConstants.SECRET_KEY_TO_GENERATE_JWT;
+import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_JWT_TOKEN_HEADER_NAME;
+import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX;
+import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_JWT_TOKEN_SECRET;
 
 
 import javax.servlet.FilterChain;
@@ -42,12 +42,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         LOGGER.info("entered doFilterInternal() method of JWTAuthorizationFilter ...");
         LOGGER.info("=============================================");
 
-        String jwtHeaderValue = request.getHeader(HEADER_NAME_FOR_JWT_TOKEN);
+        String jwtTokenHeaderName = env.getProperty(PROPERTY_JWT_TOKEN_HEADER_NAME);
+        String jwtTokenHeaderValuePrefix = env.getProperty(PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX);
+
+
+        String jwtHeaderValue = request.getHeader( jwtTokenHeaderName );
         LOGGER.info("Jwt Token Header :" + jwtHeaderValue);
 
         //if null or don't start with 'Bearer ' then continue
-        if (null == jwtHeaderValue || ! (jwtHeaderValue.startsWith(JWT_TOKEN_PREFIX)) ) {
-            LOGGER.info("Jwt Token Header is null OR not starting with \"" + JWT_TOKEN_PREFIX + "\" ");
+        if (null == jwtHeaderValue || ! (jwtHeaderValue.startsWith( jwtTokenHeaderValuePrefix )) ) {
+            LOGGER.info("Jwt Token Header is null OR not starting with \"" + jwtTokenHeaderValuePrefix + "\" ");
             chain.doFilter(request, response);
             return;
         }
@@ -55,6 +59,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         chain.doFilter(request, response);
     }
 
@@ -63,7 +68,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         LOGGER.info("entered getAuthentication() method of JWTAuthorizationFilter ...");
         LOGGER.info("=============================================");
 
-        String jwtToken = request.getHeader(HEADER_NAME_FOR_JWT_TOKEN);
+        String jwtTokenSecret = env.getProperty(PROPERTY_JWT_TOKEN_SECRET);
+        String jwtTokenHeaderName = env.getProperty(PROPERTY_JWT_TOKEN_HEADER_NAME);
+        String jwtTokenHeaderValuePrefix = env.getProperty(PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX);
+
+        String jwtToken = request.getHeader( jwtTokenHeaderName );
         LOGGER.info("-=-> jwtToken :" + jwtToken);
 
 
@@ -71,8 +80,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             // parse the token.
             String userId = Jwts.parser()
                     // this should be same value as set in Users service (see UserAuthenticationFilter )
-                    .setSigningKey(SECRET_KEY_TO_GENERATE_JWT)  //environment.getProperty(SECRET_KEY_TO_GENERATE_JWT)
-                    .parseClaimsJws(jwtToken.replace(JWT_TOKEN_PREFIX, ""))
+                    .setSigningKey( jwtTokenSecret )
+                    .parseClaimsJws(jwtToken.replace(jwtTokenHeaderValuePrefix, ""))
                     .getBody()
                     .getSubject();
 

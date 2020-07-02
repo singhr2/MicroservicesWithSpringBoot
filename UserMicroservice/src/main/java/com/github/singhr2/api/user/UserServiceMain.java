@@ -59,6 +59,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
         URL: Same as above
         Http Verb: GET
 */
+
 @SpringBootApplication
 @EnableDiscoveryClient
 //@EnableEurekaClient

@@ -4,7 +4,6 @@ import com.github.singhr2.api.user.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,9 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.Filter;
 
-import static com.github.singhr2.api.user.security.SecurityConstants.USERS_SIGN_UP_URL;
-import static com.github.singhr2.api.user.security.SecurityConstants.H2_CONSOLE_URL;
-import static com.github.singhr2.api.user.security.SecurityConstants.ZUUL_GATEWAY_IP;
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_ZUUL_GATEWAY_IP;
 
 /*
  Note: This class will be scanned at start-up time.
@@ -54,7 +51,7 @@ public class UserWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     // defines which URL paths should be secured and which should not.
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String zuulProxyIpAddress = environment.getProperty(ZUUL_GATEWAY_IP);
+        String zuulProxyIpAddress = environment.getProperty(PROPERTY_ZUUL_GATEWAY_IP);
 
         LOGGER.info("---> ---> ---> ---> ---> ---> ---> ---> ");
         LOGGER.info("---> Zuul Proxy Ip Address : " + zuulProxyIpAddress);
@@ -86,7 +83,7 @@ public class UserWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
         httpSecurity
         // Allow requests only from Zuul Proxy (API Gateway)
-        .authorizeRequests().antMatchers("/**")
+        .authorizeRequests().antMatchers("/**") //All URLs
         .hasIpAddress(zuulProxyIpAddress)
         // add custom filter for User authentication
         .and()
@@ -109,7 +106,7 @@ public class UserWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         // If the property in application.properties is not set/commented,
         //then below line will throw an error at start time.
 
-        //customAuthnFilter.setFilterProcessesUrl(environment.getProperty(PROPERTY_CUSTOM_LOGIN_URL));
+        //customAuthnFilter.setFilterProcessesUrl(environment.getProperty(PROPERTY_URL_CUSTOM_LOGIN_URL));
 
         return userAuthenticationFilter;
     }
