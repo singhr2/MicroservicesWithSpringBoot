@@ -36,6 +36,8 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
     private UsersService usersService;
     private Environment environment;
     //private AuthenticationManager authenticationManager;
+
+    //TODO Whay @Autowired is not required here ?
     public UserAuthenticationFilter(UsersService _usersService, Environment _environment, AuthenticationManager _authenticationManager) {
         this.usersService = _usersService;
         this.environment = _environment;
@@ -96,7 +98,7 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         UserDTO userDTO = usersService.getUserDetailsByEmailId(emailIdAsUsername);
         LOGGER.info("-=-> userDTO loaded :" + userDTO);
 
-        String secretKeyToGenerateJwtToken = SecurityConstants.SECRET_KEY_TO_GENERATE_JWT;
+        //String secretKeyToGenerateJwtToken = SecurityConstants.SECRET_KEY_TO_GENERATE_JWT;
 
         Long jwt_token_validity_duration = SecurityConstants.JWT_TOKEN_VALIDE_FOR;
         LOGGER.info("-=-> JWT token_expiration_time : " + jwt_token_validity_duration);
@@ -117,17 +119,24 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                 .signWith(
                         SignatureAlgorithm.HS512,
                         //TextCodec.BASE64.decode(environment.getProperty(JWT_TOKEN_SECRET))
-                        secretKeyToGenerateJwtToken
+                        // This value is also referred in JWTAuthorizationFilter (zuul proxy)
+                        SecurityConstants.SECRET_KEY_TO_GENERATE_JWT
                 )
                 .compact();
 
         LOGGER.info("-=-> JWT Token generated :" + jwsAccessToken);
 
+        //<IMPORTANT>
+        // Note that when adding the header value in Postman/Boomrang
+        // We don't need to add the prefix 'Bearer ' as it is added here.
         response.addHeader(
                 SecurityConstants.HEADER_NAME_FOR_JWT_TOKEN,
                 SecurityConstants.JWT_TOKEN_PREFIX + jwsAccessToken);
 
-        response.setHeader(SecurityConstants.HEADER_NAME_FOR_USERNAME, userDTO.getUserId());
+        LOGGER.info("JwtToken in Header :" + response.getHeader(SecurityConstants.HEADER_NAME_FOR_JWT_TOKEN));
+
+        //commented as don't see being referred anywhere
+        //response.setHeader(SecurityConstants.HEADER_NAME_FOR_USERNAME, userDTO.getUserId());
     }
 
     /*

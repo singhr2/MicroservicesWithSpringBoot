@@ -1,4 +1,4 @@
-package com.github.singhr2.api.user.security;
+package com.github.singhr2.services.proxy.security;
 
 //---------------------------------------------
 // These values are referred in
@@ -19,6 +19,7 @@ public class SecurityConstants {
     //public static final Long PROPERTY_JWT_TOKEN_VALIDE_FOR = 864_000_000L;
     public static final Long JWT_TOKEN_VALIDE_FOR = 1L;  // no. of day(s)
 
+    //TODO move these to application.properties
     public static final String JWT_TOKEN_PREFIX = "Bearer "; // DoNot delete SPACE at the end
     public static final String HEADER_NAME_FOR_JWT_TOKEN = "Authorization";
 

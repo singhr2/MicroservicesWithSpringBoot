@@ -124,6 +124,9 @@ public class UserWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //sets up a basic in-memory authentication config. {unconfirmed}
+        //auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+
         auth
         .userDetailsService( usersService )
         .passwordEncoder( bCryptPasswordEncoder);

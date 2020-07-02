@@ -86,6 +86,9 @@ public class UsersServiceImpl implements UsersService {
         UserDTO userDto;
         Iterable<UserEntity> userEntities =  userRepository.findAll();
 
+//        ModelMapper mapper = new ModelMapper();
+//        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT); //LOOSE, STANDARD, STRICT
+
         //TODO throw error when no record found
 
         for(UserEntity entity: userEntities){
