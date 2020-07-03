@@ -67,6 +67,16 @@
             <version>0.9.1</version>
         </dependency>
 
+
+        <!--
+            Client that connects to a Spring Cloud Config Server
+            to fetch the application's configuration.
+        -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
