@@ -1,0 +1,65 @@
+
+POST
+http://192.168.1.5:8011/users-ws/api/users/sign-up
+
+Request Json:
+	{
+    "firstName":"Ranbir",
+    "lastName":"Singh",
+    "password":"a1b2c3d4",
+    "emailId":"2@a.com"
+	}
+	
+Header : None
+
+=========================================
+
+POST
+http://192.168.1.5:8011/users-ws/login
+
+Request Json:
+	{
+		"email": "2@a.com",
+		"password": "a1b2c3d4"
+	}
+	
+Header : None
+
+Note: The user must already been created using /sign-up
+=========================================
+
+GET
+http://192.168.1.5:8011/users-ws/api/users/health-check
+
+Request Json:
+	None
+	
+Header : 
+	Name: Authorization
+	Value: Bearer <replace with JWT token after one space>
+=========================================
+
+GET
+http://192.168.1.5:8011/users-ws/api/users/service-instances/users-ws
+
+Request Json:
+	None
+	
+Header : 
+	Name: Authorization
+	Value: Bearer <replace with JWT token after one space>
+
+=========================================
+
+GET
+http://192.168.1.5:8011/users-ws/api/users/
+
+Request Json:
+	None
+	
+Header : 
+	Name: Authorization
+	Value: Bearer <replace with JWT token after one space>
+
+
+=========================================
