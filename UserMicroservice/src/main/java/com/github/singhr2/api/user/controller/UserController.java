@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JWT_TOKEN_SECRET;
 
 /*
  Note: get the Hostname + Port Number from Eureka e.g.,
@@ -41,6 +43,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users") //This is referenced in UserWebSecurity class
+//TODO CHECK IF REQUIRED HERE @RefreshScope
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -82,9 +85,11 @@ public class UserController {
 
     @GetMapping("/health-check")
     public String greeting() {
-        return String.format("Hello from '%s' @ Port# '%s' !",
+        //PROPERTY_JWT_TOKEN_SECRET added to check value refresh by spring cloud bus
+        return String.format("Hello from '%s' @ Port# '%s' ! , Using token secret : '%s'",
                 env.getProperty("spring.application.name"),
-                env.getProperty("local.server.port"));
+                env.getProperty("local.server.port"),
+                env.getProperty(PROPERTY_JWT_TOKEN_SECRET));
     }
 
 

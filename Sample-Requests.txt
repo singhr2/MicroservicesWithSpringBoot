@@ -1,5 +1,36 @@
 
-POST
+Eureka Discovery:
+	http://localhost:8761/
+
+Zuul Proxy:
+	http://192.168.1.5:8011/actuator/health
+
+
+Config Server:
+	#(type=Not Found, status=404)
+	http://localhost:8012/
+
+	# View properties for service with id=users_ws and profile=dev (both defined in bootstrap.properties file)
+	# Github file: MicroservicesConfigurableProperties/users_ws-dev.properties
+	To access properties : 	http://localhost:8012/users_ws/dev
+	
+	# view properties for service with id=zuul_proxy  and profile=dev
+	# Github file: MicroservicesConfigurableProperties/zuul_proxy-dev.properties
+	To access properties : http://localhost:8012/zuul_proxy/dev
+
+
+H2-Console (in Users Service)
+	http://192.168.1.5:8011/users-ws/h2-console
+
+
+ZooKeeper
+	binding to port 0.0.0.0/0.0.0.0:2181
+	
+Kafka 
+	http://localhost:9092
+
+=========================================
+POST (Use Postman/Boomrang):
 http://192.168.1.5:8011/users-ws/api/users/sign-up
 
 Request Json:
@@ -26,6 +57,8 @@ Request Json:
 Header : None
 
 Note: The user must already been created using /sign-up
+
+Also note the JWT token created, this needs to be passed to passed in Header (Authorization, value : Bearer eyJhbG.....pv5A)
 =========================================
 
 GET
@@ -60,6 +93,25 @@ Request Json:
 Header : 
 	Name: Authorization
 	Value: Bearer <replace with JWT token after one space>
+
+
+=========================================
+push confguration changes to all config clients:
+
+POST 
+http://192.168.1.5:8011/actuator/bus-refresh
+
+Request Json:
+	None
+
+=========================================
+Refresh properties for specific service instance:
+
+POST http://192.168.1.5:55729/actuator/refresh
+
+where 
+	192.168.1.5:55729 is the instance info from eureka server
+=========================================
 
 
 =========================================

@@ -3,6 +3,7 @@ package com.github.singhr2.api.user;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /*
  * Note:
@@ -63,6 +64,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 //@EnableEurekaClient
+@RefreshScope  // added for spring cloud bus - to check if we need to add in individual classes.
 public class UserServiceMain {
     public static void main(String[] args) {
         SpringApplication.run(UserServiceMain.class, args);

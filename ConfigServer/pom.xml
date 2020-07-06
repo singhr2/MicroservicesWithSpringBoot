@@ -22,6 +22,17 @@
             <artifactId>spring-cloud-config-server</artifactId>
         </dependency>
 
+        <!--
+        Eureka Discovery Client :
+        a REST based service for locating services for the purpose of load balancing and
+        failover of middle-tier servers.
+        -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+
         <!-- As per https://www.baeldung.com/spring-cloud-configuration,
              below 2 dependencies are needed, not sure why hence commented.
         -->
@@ -51,7 +62,50 @@
                 </exclusions>
             </dependency>
     -->
-        </dependencies>
+
+        <!-- added for Spring Cloud Bus -->
+        <!-- ===================================== -->
+        <!--
+        Spring Boot Actuator (OPS)
+        Supports built in (or custom) endpoints that let you monitor and manage your application
+        - such as application health, metrics, sessions, etc.
+
+        It exposes an endpoint which is need to refresh application configuration data.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--
+        Add this to every project that needs to refresh property changes dynamically
+        (using Rabbit MQ)
+        -->
+        <!--
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
+        -->
+
+        <!-- Spring Cloud Bus with Kafka -->
+        <!--                Config Server ONLY dependencies         -->
+        <!--
+            spring-cloud-config-monitor opens up the '/monitor' endpoint on config server
+            which listens to any change of events (git webhook) and in turn
+            refresh call to spring cloud bus which post the message to kafka broker.
+            Any clients listening to the kafka broker’s topic will get event to refresh.
+        -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-monitor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-kafka</artifactId>
+        </dependency>
+    </dependencies>
 
     <!-- COMMENTED AS IT IS ALREADY PRESENT IN PARENT MODULE
         <dependencyManagement>
