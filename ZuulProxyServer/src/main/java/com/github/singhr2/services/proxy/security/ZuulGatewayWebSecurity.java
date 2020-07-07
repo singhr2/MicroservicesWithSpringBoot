@@ -3,6 +3,7 @@ package com.github.singhr2.services.proxy.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,7 @@ import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPE
 
 @Configuration
 @EnableWebSecurity
+//@RefreshScope
 public class ZuulGatewayWebSecurity extends WebSecurityConfigurerAdapter {
     private  final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

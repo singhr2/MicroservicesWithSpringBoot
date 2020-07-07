@@ -43,7 +43,7 @@ import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JW
 
 @RestController
 @RequestMapping("/api/users") //This is referenced in UserWebSecurity class
-//TODO CHECK IF REQUIRED HERE @RefreshScope
+//TODO CHECK IF REQUIRED HERE -> @RefreshScope
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 

@@ -71,12 +71,19 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String jwtTokenSecret = env.getProperty(PROPERTY_JWT_TOKEN_SECRET);
         String jwtTokenHeaderName = env.getProperty(PROPERTY_JWT_TOKEN_HEADER_NAME);
         String jwtTokenHeaderValuePrefix = env.getProperty(PROPERTY_JWT_TOKEN_HEADER_VALUE_PREFIX);
-
         String jwtToken = request.getHeader( jwtTokenHeaderName );
+
+        LOGGER.info("---------------------------------------------");
+        LOGGER.info("-=-> jwtTokenSecret :" + jwtTokenSecret);
+        LOGGER.info("-=-> jwtTokenHeaderName :" + jwtTokenHeaderName);
+        LOGGER.info("-=-> jwtTokenHeaderValuePrefix :" + jwtTokenHeaderValuePrefix);
         LOGGER.info("-=-> jwtToken :" + jwtToken);
+        LOGGER.info("=============================================");
 
 
         if (null != jwtToken) {
+            LOGGER.info("-=-> Validating JWT Token." );
+
             // parse the token.
             String userId = Jwts.parser()
                     // this should be same value as set in Users service (see UserAuthenticationFilter )

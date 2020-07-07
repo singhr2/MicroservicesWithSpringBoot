@@ -127,6 +127,7 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                 )
                 .compact();
 
+        LOGGER.info("-=-> Token Secret used to generate JWT Token :" + environment.getProperty( PROPERTY_JWT_TOKEN_SECRET ));
         LOGGER.info("-=-> JWT Token generated :" + jwsAccessToken);
 
         //<IMPORTANT>

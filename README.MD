@@ -6,4 +6,6 @@ https://cognizant.udemy.com/course/spring-boot-microservices-and-spring-cloud/le
 <br>
 2) https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
 <br>
-3) 
+3) https://medium.com/@athulravindran/spring-cloud-config-server-auto-refresh-using-apache-kafka-in-kubernetes-86e3c427926e
+<br>
+4) 
