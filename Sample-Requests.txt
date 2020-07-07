@@ -1,33 +1,88 @@
 
+Udemy course Github URL:
+	Source code of this project is available here: 
+	Clone it from Github: https://github.com/simplyi/SpringCloudVideoCourse.git
+	or download as a ZIP archive: https://github.com/simplyi/SpringCloudVideoCourse/archive/master.zip
+
+	Blog: https://www.appsdeveloperblog.com/spring-cloud-config-server-and-config-client/
+	
+	Config Server  - configuration properties only
+	https://s3-us-west-2.amazonaws.com/appsdeveloperblog.com/config-server-nfs.zip
+
+	Albums Microservice
+	https://github.com/simplyi/PhotoAppApiAlbums
+
+	QuickStart. Section 3 source code. 
+	https://github.com/simplyi/mobile-app-ws-quick-start.git
+		
+	
+My GitHub repositories:
+	1) Project Module 
+	https://github.com/singhr2/MicroservicesWithSpringBoot
+	
+	2) Configurable Properties 
+	https://github.com/singhr2/MicroservicesConfigurableProperties
+
+
+<IMPORTANT>
+MicroservicesWithSpringBoot\ConfigServer\src\main\resources\application.properties
+	spring.cloud.config.server.git.password=Ranbir#262789
+!!! DONOT COMMIT THE ABOVE CHANGE
+
+
+[ Sequence of starting  ]
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+	1. Zookeeper
+		C:\SW\kafka_2.13-2.5.0\bin\windows\zookeeper-server-start.bat C:\SW\kafka_2.13-2.5.0\config\zookeeper.properties
+
+	2. Kafka broker
+		C:\SW\kafka_2.13-2.5.0\bin\windows\kafka-server-start.bat C:\SW\kafka_2.13-2.5.0\config\server.properties
+		
+	3. Eureka Discovery Server
+	4. Config Server
+	5. Zuul Proxy
+	6. Users Service
+
+Zookeeper
+	binding to port 0.0.0.0/0.0.0.0:2181
+
+Kafka	
+	Awaiting socket connections on 0.0.0.0:9092. (kafka.network.Acceptor)
+
 Eureka Discovery:
 	http://localhost:8761/
 
-Zuul Proxy:
-	http://192.168.1.5:8011/actuator/health
 
+Config Server: (port# hardcoded)
+	http://localhost:8012/{application}/{profile}
 
-Config Server:
 	#(type=Not Found, status=404)
 	http://localhost:8012/
 
-	# View properties for service with id=users_ws and profile=dev (both defined in bootstrap.properties file)
-	# Github file: MicroservicesConfigurableProperties/users_ws-dev.properties
-	To access properties : 	http://localhost:8012/users_ws/dev
+	# ???
+	http://192.168.1.5:8012/config-server/native
+
+	#https://github.com/singhr2/MicroservicesConfigurableProperties/blob/master/application.properties
+	http://localhost:8012/config-server/default
+
+	# https://github.com/singhr2/MicroservicesConfigurableProperties/blob/master/users-ws-dev.properties
+	# application.name=users-ws, profile=dev
+	http://localhost:8012/users-ws/default
+	http://localhost:8012/users-ws/dev
 	
-	# view properties for service with id=zuul_proxy  and profile=dev
-	# Github file: MicroservicesConfigurableProperties/zuul_proxy-dev.properties
-	To access properties : http://localhost:8012/zuul_proxy/dev
+	#https://github.com/singhr2/MicroservicesConfigurableProperties/blob/master/zuul-proxy-dev.properties
+	# application.name=config-server, profile=dev
+	http://localhost:8012/config-server/default
+	http://localhost:8012/config-server/dev
+
+
+Zuul Proxy: (port# hardcoded)
+	http://192.168.1.5:8011/actuator/health
 
 
 H2-Console (in Users Service)
 	http://192.168.1.5:8011/users-ws/h2-console
 
-
-ZooKeeper
-	binding to port 0.0.0.0/0.0.0.0:2181
-	
-Kafka 
-	http://localhost:9092
 
 =========================================
 POST (Use Postman/Boomrang):
@@ -45,6 +100,8 @@ Header : None
 
 =========================================
 
+Note: User must be created (see above) before login
+
 POST
 http://192.168.1.5:8011/users-ws/login
 
@@ -56,9 +113,12 @@ Request Json:
 	
 Header : None
 
-Note: The user must already been created using /sign-up
+Note the JWT token created, 
+this needs to be passed to passed in Header 
+Header Name : Authorization
+Header value: Bearer {eyJhbG.....pv5A)}
 
-Also note the JWT token created, this needs to be passed to passed in Header (Authorization, value : Bearer eyJhbG.....pv5A)
+Note: there is space between 'Bearer' keyword and JWT Token value`
 =========================================
 
 GET
@@ -97,20 +157,21 @@ Header :
 
 =========================================
 push confguration changes to all config clients:
+Note: 192.168.1.5:8012 refers to config server`
 
 POST 
-http://192.168.1.5:8011/actuator/bus-refresh
+http://192.168.1.5:8012/actuator/bus-refresh
 
 Request Json:
 	None
 
 =========================================
 Refresh properties for specific service instance:
+Note: 192.168.1.5:55729 refers to specific instance of some service (get from link in Eureka console)
 
-POST http://192.168.1.5:55729/actuator/refresh
+POST 
+http://192.168.1.5:55729/actuator/refresh
 
-where 
-	192.168.1.5:55729 is the instance info from eureka server
 =========================================
 
 
