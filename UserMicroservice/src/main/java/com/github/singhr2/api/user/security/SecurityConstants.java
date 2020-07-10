@@ -22,6 +22,9 @@ public class SecurityConstants {
 
     public static final String PROPERTY_JWT_TOKEN_HEADER_NAME = "jwt.token.header.name";
 
+    //Added to test enc/decryption
+    public static final String PROPERTY_ENCRYPTED_VALUE = "custom.encrypted.value";
+
     // URLs referenced in code
     // Note: This is defined in 'UsersController' (path = "/sign-up")
     //public static final String PROPERTY_URL_USERS_SIGN_UP = "url.users.signup";

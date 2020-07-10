@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_JWT_TOKEN_SECRET;
+import static com.github.singhr2.api.user.security.SecurityConstants.PROPERTY_ENCRYPTED_VALUE;
 
 /*
  Note: get the Hostname + Port Number from Eureka e.g.,
@@ -126,5 +127,10 @@ public class UserController {
         CreateUserResponseModel responseModel = mapper.map(createdUserDTO, CreateUserResponseModel.class);
 
         return new ResponseEntity<>(responseModel, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/read-encrypted-value")
+    public String readDecryptedValue(){
+       return env.getProperty(PROPERTY_ENCRYPTED_VALUE);
     }
 }
