@@ -32,6 +32,13 @@ MicroservicesWithSpringBoot\ConfigServer\src\main\resources\application.properti
 
 [ Sequence of starting  ]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+	cd C:\SW\kafka_2.13-2.5.0
+	Cmd-window-1) $ 01startZookeeper.bat
+	(this is shortcut created to below step# 1)
+	
+	Cmd-window-2) $ 02startKafkaBroker.bat
+	(this is shortcut created to below step# 2)
+	
 	1. Zookeeper
 		C:\SW\kafka_2.13-2.5.0\bin\windows\zookeeper-server-start.bat C:\SW\kafka_2.13-2.5.0\config\zookeeper.properties
 
@@ -39,7 +46,7 @@ MicroservicesWithSpringBoot\ConfigServer\src\main\resources\application.properti
 		C:\SW\kafka_2.13-2.5.0\bin\windows\kafka-server-start.bat C:\SW\kafka_2.13-2.5.0\config\server.properties
 		
 	3. Eureka Discovery Server
-	4. Config Server
+	4. Config Server  (this needs to be started before zuul as zuul uses some config properties) 
 	5. Zuul Proxy
 	6. Users Service
 

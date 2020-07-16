@@ -1,6 +1,7 @@
 package com.github.singhr2.api.user.service;
 
 import com.github.singhr2.api.user.dto.UserDTO;
+import com.github.singhr2.api.user.model.SampleServiceResponseModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface UsersService extends UserDetailsService {
 
     //Added for User Authentication using email-id/password
     UserDTO getUserDetailsByEmailId(String emailId);
+
+    List<SampleServiceResponseModel> callExternalService();
 }

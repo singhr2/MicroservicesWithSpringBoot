@@ -1,27 +1,50 @@
 package com.github.singhr2.api.user.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.singhr2.api.user.data.entity.UserEntity;
 import com.github.singhr2.api.user.data.repository.UserRepository;
 import com.github.singhr2.api.user.dto.UserDTO;
+import com.github.singhr2.api.user.model.SampleServiceResponseModel;
 import com.github.singhr2.api.user.service.UsersService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UsersServiceImpl implements UsersService {
+
     private  final Logger LOGGER = LoggerFactory.getLogger( this.getClass() );
+
+    /*
+    @JsonProperty("records")
+    private List<String> records;
+    public List<String> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<String> records) {
+        this.records = records;
+    }
+    */
+
 
     //@Autowired
     private UserRepository userRepository;
@@ -30,6 +53,9 @@ public class UsersServiceImpl implements UsersService {
     //defined in PasswordEncodingUtil.java
     private PasswordEncoder bCryptPasswordEncoder;
 
+    @Value("${url.external.service}")
+    private String externalServiceURL;
+
     //constructor-based dependency injection (DI)
     @Autowired
     public UsersServiceImpl( UserRepository userRepo, PasswordEncoder bCPEncoder){
@@ -37,6 +63,28 @@ public class UsersServiceImpl implements UsersService {
         bCryptPasswordEncoder = bCPEncoder;
     }
 
+
+    //Consider defining a bean of type 'org.springframework.web.client.RestTemplate' in your configuration.
+    //@Autowired
+    //RestTemplate restTemplate;
+
+    @Bean
+    public RestTemplate getRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        //Option-1
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+//        messageConverters.add(converter);
+//        restTemplate.setMessageConverters(messageConverters);
+
+        //Option-2
+//        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
+//        RestTemplate restTemplate = new RestTemplate(requestFactory);
+
+        return restTemplate;
+    }
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
@@ -121,4 +169,28 @@ public class UsersServiceImpl implements UsersService {
                 new ArrayList<>()); //authorities
     }
 
+    @Override
+    public List<SampleServiceResponseModel> callExternalService() {
+        RestTemplate restTemplate = getRestTemplate();
+        List<String> records = new ArrayList<>();
+
+        // use the ParameterizedTypeReference class of Spring
+        // to convert to List the data returned by ResponseEntity
+        ParameterizedTypeReference<List<SampleServiceResponseModel>> typeRef =
+                new ParameterizedTypeReference<List<SampleServiceResponseModel>>() {};
+
+        ResponseEntity<List<SampleServiceResponseModel>> responseEntity =
+                restTemplate.exchange(
+                        externalServiceURL,
+                        HttpMethod.GET,
+                        null, // request entity
+                        typeRef
+                );
+
+        return responseEntity.getBody() != null ?
+                //Arrays.asList(responseEntity.getBody())
+                responseEntity.getBody()
+                :
+                Collections.emptyList();
+    }
 }

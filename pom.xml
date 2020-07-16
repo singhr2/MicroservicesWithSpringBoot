@@ -9,6 +9,7 @@
         <module>AccountManagement</module>
         <module>ZuulProxyServer</module>
         <module>ConfigServer</module>
+        <module>StubForExternalService</module>
     </modules>
 
     <parent>

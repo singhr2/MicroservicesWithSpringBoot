@@ -4,6 +4,7 @@ import com.github.singhr2.api.user.dto.UserDTO;
 import com.github.singhr2.api.user.model.CreateUserRequestModel;
 import com.github.singhr2.api.user.model.CreateUserResponseModel;
 import com.github.singhr2.api.user.model.GetUsersResponseModel;
+import com.github.singhr2.api.user.model.SampleServiceResponseModel;
 import com.github.singhr2.api.user.service.UsersService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -132,5 +133,11 @@ public class UserController {
     @GetMapping("/read-encrypted-value")
     public String readDecryptedValue(){
        return env.getProperty(PROPERTY_ENCRYPTED_VALUE);
+    }
+
+    @GetMapping("/external-ws")
+    public List<SampleServiceResponseModel> callExternalService(){
+        List<SampleServiceResponseModel> response = usersService.callExternalService();
+        return response;
     }
 }

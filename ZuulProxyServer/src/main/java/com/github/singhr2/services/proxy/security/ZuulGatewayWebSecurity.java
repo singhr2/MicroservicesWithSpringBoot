@@ -17,6 +17,9 @@ import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPE
 import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_URL_USERS_SIGN_IN;
 import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_URL_USERS_SRVC_ACTUATOR;
 import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_URL_ZUUL_PROXY_ACTUATOR;
+import static com.github.singhr2.services.proxy.security.SecurityConstants.PROPERTY_URL_FOR_EXTERNAL_SERVICE;
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +42,8 @@ public class ZuulGatewayWebSecurity extends WebSecurityConfigurerAdapter {
         String urlForUserSignIn = env.getProperty(PROPERTY_URL_USERS_SIGN_IN);
         String urlForUserSrvcActuators = env.getProperty(PROPERTY_URL_USERS_SRVC_ACTUATOR);
         String urlForZuulActuators = env.getProperty(PROPERTY_URL_ZUUL_PROXY_ACTUATOR);
+        String urlForExternalService = env.getProperty(PROPERTY_URL_FOR_EXTERNAL_SERVICE);
+
 
         LOGGER.info("---------------------------------------------");
         LOGGER.info("entered configure() method for Zuul proxy ...");
@@ -47,6 +52,7 @@ public class ZuulGatewayWebSecurity extends WebSecurityConfigurerAdapter {
         LOGGER.info(">> api.login.url.path {post}: " + urlForUserSignIn);
         LOGGER.info(">> api.users.actuator.url.path : " + urlForUserSrvcActuators);
         LOGGER.info(">> api.zuul.actuator.url.path : " + urlForZuulActuators);
+        LOGGER.info(">> url.external.service : " + urlForExternalService);
         LOGGER.info("=============================================");
 
         //refer UserWebSecurityConfigurer for documentation
@@ -63,6 +69,8 @@ public class ZuulGatewayWebSecurity extends WebSecurityConfigurerAdapter {
         .antMatchers( urlForUserSrvcActuators ).permitAll()
         .antMatchers( urlForZuulActuators ).permitAll()
         .antMatchers( urlForH2Console ).permitAll()
+        //sample external service invoked from Users service.
+        .antMatchers( urlForExternalService ).permitAll()
         .antMatchers(HttpMethod.POST, urlForUserSignUp ).permitAll()
         .antMatchers(HttpMethod.POST, urlForUserSignIn ).permitAll()
         // any other request should be authenticated using the Filter

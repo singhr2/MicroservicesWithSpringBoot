@@ -34,4 +34,7 @@ public class SecurityConstants {
     // UserWebSecurityConfigurer.getUserAuthenticationFilter()
     // By default, spring provides '/login' as endpoint url
     public static final String PROPERTY_URL_NEW_USER_REGISTRATION = "url.users.signup"; // New User Regd.
+
+    //service called from users service
+    public static final String PROPERTY_URL_FOR_EXTERNAL_SERVICE = "url.external.service";
 }

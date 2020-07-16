@@ -31,4 +31,7 @@ public class SecurityConstants {
 
     //Note: These can be changed in application.properties
     //public static final String PROPERTY_URL_H2_CONSOLE ="url.h2.console";
+
+    //service called from users service
+    //public static final String PROPERTY_URL_FOR_EXTERNAL_SERVICE = "url.external.service";
 }
