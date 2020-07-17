@@ -1,10 +1,7 @@
 package com.github.singhr2.api.external.controller;
 
 import com.github.singhr2.api.external.model.SampleServiceResponseModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +10,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/external")
 public class StubForExternalServiceController {
-
-    /**
-     * This is dummy method added to be invoked from Users service
-     * to test service to service invocation
-     * using RestTemplate
-     *
-     * @return
-     */
-    @GetMapping("/test1")
-    public List<String> showAll(){
-        List<String> sampleDataCollection = new ArrayList<>();
-        sampleDataCollection.add("Get");
-        sampleDataCollection.add("Set");
-        sampleDataCollection.add("Go");
-
-        return sampleDataCollection;
+    // Sample request: http://someIp:port/api/external/v1/greet?
+    @GetMapping("/{version}/greet")
+    public String greeting(@PathVariable("version") String version,
+                           @RequestParam(value="username", required=false) String username) {
+        return String.format("Hello %s!, the version of api is %s \n", username, version);
     }
 
     @GetMapping("/show-all/{dummyPathVarID}")

@@ -33,6 +33,7 @@ MicroservicesWithSpringBoot\ConfigServer\src\main\resources\application.properti
 [ Sequence of starting  ]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 	cd C:\SW\kafka_2.13-2.5.0
+	
 	Cmd-window-1) $ 01startZookeeper.bat
 	(this is shortcut created to below step# 1)
 	
@@ -46,10 +47,15 @@ MicroservicesWithSpringBoot\ConfigServer\src\main\resources\application.properti
 		C:\SW\kafka_2.13-2.5.0\bin\windows\kafka-server-start.bat C:\SW\kafka_2.13-2.5.0\config\server.properties
 		
 	3. Eureka Discovery Server
+	
 	4. Config Server  (this needs to be started before zuul as zuul uses some config properties) 
+	
 	5. Zuul Proxy
+	
 	6. Users Service
 
+	7. External service
+	
 Zookeeper
 	binding to port 0.0.0.0/0.0.0.0:2181
 
@@ -180,6 +186,13 @@ POST
 http://192.168.1.5:55729/actuator/refresh
 
 =========================================
+
+Calling external service (ExternalService) from User service
+
+1st create Users 
+then login to get the JWT tocken
+GET http://192.168.1.5:8011/users-ws/api/users/external-ws
+
 
 
 =========================================

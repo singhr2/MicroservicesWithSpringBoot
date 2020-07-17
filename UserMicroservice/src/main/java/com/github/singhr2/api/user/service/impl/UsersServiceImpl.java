@@ -6,6 +6,7 @@ import com.github.singhr2.api.user.data.repository.UserRepository;
 import com.github.singhr2.api.user.dto.UserDTO;
 import com.github.singhr2.api.user.model.SampleServiceResponseModel;
 import com.github.singhr2.api.user.service.UsersService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ import java.util.*;
 @Service
 public class UsersServiceImpl implements UsersService {
 
-    private  final Logger LOGGER = LoggerFactory.getLogger( this.getClass() );
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /*
     @JsonProperty("records")
@@ -58,7 +59,7 @@ public class UsersServiceImpl implements UsersService {
 
     //constructor-based dependency injection (DI)
     @Autowired
-    public UsersServiceImpl( UserRepository userRepo, PasswordEncoder bCPEncoder){
+    public UsersServiceImpl(UserRepository userRepo, PasswordEncoder bCPEncoder) {
         userRepository = userRepo;
         bCryptPasswordEncoder = bCPEncoder;
     }
@@ -106,7 +107,7 @@ public class UsersServiceImpl implements UsersService {
         LOGGER.info(" Going to save the entity object - " + userEntity);
         UserEntity userEntityReturned = userRepository.save(userEntity);
 
-        LOGGER.info(" userEntity saved. "+ userEntityReturned );
+        LOGGER.info(" userEntity saved. " + userEntityReturned);
 
         //Map the entity object to dto to be returned to Controller class
         UserDTO userDTOReturned = mapper.map(userEntityReturned, UserDTO.class);
@@ -120,7 +121,7 @@ public class UsersServiceImpl implements UsersService {
         //we need to provide user details for authentication
         UserEntity userEntity = userRepository.findByEmailId(emailIdAsUsername);
 
-        if(userEntity == null) throw new UsernameNotFoundException(emailIdAsUsername);
+        if (userEntity == null) throw new UsernameNotFoundException(emailIdAsUsername);
 
         UserDTO userDto = new ModelMapper().map(userEntity, UserDTO.class);
         LOGGER.info("UserDTO returned by getUserDetailsByEmailId() : " + userDto);
@@ -132,14 +133,14 @@ public class UsersServiceImpl implements UsersService {
     public List<UserDTO> getAllUsers() {
         List<UserDTO> fetchedUsers = new ArrayList<>();
         UserDTO userDto;
-        Iterable<UserEntity> userEntities =  userRepository.findAll();
+        Iterable<UserEntity> userEntities = userRepository.findAll();
 
 //        ModelMapper mapper = new ModelMapper();
 //        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT); //LOOSE, STANDARD, STRICT
 
         //TODO throw error when no record found
 
-        for(UserEntity entity: userEntities){
+        for (UserEntity entity : userEntities) {
             userDto = new ModelMapper().map(entity, UserDTO.class);
             fetchedUsers.add(userDto);
         }
@@ -156,9 +157,9 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity= userRepository.findByEmailId(username);
+        UserEntity userEntity = userRepository.findByEmailId(username);
 
-        if(userEntity == null) throw new UsernameNotFoundException(username);
+        if (userEntity == null) throw new UsernameNotFoundException(username);
 
         return new User(userEntity.getEmailId(),  // username
                 userEntity.getEncryptedPassword(), // password
@@ -169,7 +170,17 @@ public class UsersServiceImpl implements UsersService {
                 new ArrayList<>()); //authorities
     }
 
+
+    /**
+     * This service will be calling external service.
+     * Hystrix fallback method will have same signature as actual method
+     * <p>
+     * To Test:
+     * Stop the External service and see the output of this method call
+     */
+
     @Override
+    @HystrixCommand(fallbackMethod = "fallbackMethodForCallExternalService")
     public List<SampleServiceResponseModel> callExternalService() {
         RestTemplate restTemplate = getRestTemplate();
         List<String> records = new ArrayList<>();
@@ -177,7 +188,8 @@ public class UsersServiceImpl implements UsersService {
         // use the ParameterizedTypeReference class of Spring
         // to convert to List the data returned by ResponseEntity
         ParameterizedTypeReference<List<SampleServiceResponseModel>> typeRef =
-                new ParameterizedTypeReference<List<SampleServiceResponseModel>>() {};
+                new ParameterizedTypeReference<List<SampleServiceResponseModel>>() {
+                };
 
         ResponseEntity<List<SampleServiceResponseModel>> responseEntity =
                 restTemplate.exchange(
@@ -192,5 +204,14 @@ public class UsersServiceImpl implements UsersService {
                 responseEntity.getBody()
                 :
                 Collections.emptyList();
+    }
+
+    public List<SampleServiceResponseModel> fallbackMethodForCallExternalService() {
+        List<SampleServiceResponseModel> collection = new ArrayList<>();
+
+        collection.add(new SampleServiceResponseModel(UUID.randomUUID(), "default user1", "default@mysite.com", 1800888999L, "default"));
+        collection.add(new SampleServiceResponseModel(UUID.randomUUID(), "dummy2", "dummy2@mysite.com", 1800222333L, "default"));
+
+        return collection;
     }
 }
