@@ -192,6 +192,19 @@
            	<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
         </dependency>
 
+        <!-- Distributed Tracing, Log Aggregation and Visualization -->
+        <!-- Format in log file [application name, traceId, spanId, export] -->
+        <!-- If using custom log format, please test by commenting in case of any issue -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+
         <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>

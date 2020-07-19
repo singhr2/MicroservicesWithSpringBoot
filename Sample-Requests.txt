@@ -189,8 +189,10 @@ http://192.168.1.5:55729/actuator/refresh
 
 Calling external service (ExternalService) from User service
 
-1st create Users 
-then login to get the JWT tocken
+1st create Users (POST http://192.168.1.5:8011/users-ws/api/users/sign-up)
+
+then login to get the JWT tocken (GET http://192.168.1.5:8011/users-ws/login)
+
 GET http://192.168.1.5:8011/users-ws/api/users/external-ws
 
 
